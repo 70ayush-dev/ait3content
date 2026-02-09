@@ -1,0 +1,333 @@
+//
+// Variables
+// --------------------------------------------------
+$cookieconsent-zindex: 1080 !default;
+$cookieconsent-padding: 2rem !default;
+$cookieconsent-space: 20px !default;
+$cookieconsent-bg: #1b1b1b !default;
+$cookieconsent-color: color-contrast($cookieconsent-bg) !default;
+$cookieconsent-link-color: a11y-color($cookieconsent-bg, $primary) !default;
+$cookieconsent-button-bg: a11y-color($cookieconsent-bg, $primary) !default;
+$cookieconsent-button-highlight-bg: transparent !default;
+:root {
+    --cookieconsent-zindex: #{$cookieconsent-zindex};
+    --cookieconsent-padding: #{$cookieconsent-padding};
+    --cookieconsent-space: #{$cookieconsent-space};
+    --cookieconsent-bg: #{$cookieconsent-bg};
+    --cookieconsent-color: #{$cookieconsent-color};
+    --cookieconsent-link-color: #{$cookieconsent-link-color};
+    --cookieconsent-button-bg: #{$cookieconsent-button-bg};
+    --cookieconsent-button-highlight-bg: #{$cookieconsent-button-highlight-bg};
+}
+
+//
+// Animation
+// --------------------------------------------------
+.cc-window {
+    opacity: 1;
+    transition: opacity 1s ease;
+    &.cc-invisible {
+        opacity: 0;
+    }
+}
+.cc-animate {
+    &.cc-revoke {
+        transition: transform 1s ease;
+        &.cc-top {
+            transform: translateY(-2rem);
+        }
+        &.cc-bottom {
+            transform: translateY(2rem);
+        }
+        &.cc-active {
+            &.cc-top {
+                transform: translateY(0);
+            }
+            &.cc-bottom {
+                transform: translateY(0);
+            }
+        }
+    }
+}
+.cc-revoke:hover {
+    transform: translateY(0);
+}
+.cc-grower {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1s;
+}
+
+//
+// Base
+// --------------------------------------------------
+.cc-window,
+.cc-revoke {
+    position: fixed;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    z-index: var(--cookieconsent-zindex);
+}
+.cc-window {
+    &.cc-static {
+        position: static;
+    }
+    &.cc-floating {
+        .cc-container {
+            padding-left: var(--cookieconsent-padding);
+            padding-right: var(--cookieconsent-padding);
+        }
+        padding: 2rem 0;
+        max-width: 380px;
+        flex-direction: column;
+    }
+    &.cc-banner {
+        padding: var(--cookieconsent-padding) 0;
+        width: 100%;
+        flex-direction: row;
+    }
+}
+.cc-revoke {
+    padding: .5rem;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+.cc-header {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+.cc-link,
+.cc-close,
+.cc-revoke {
+    cursor: pointer;
+}
+.cc-link {
+    display: inline-block;
+    padding: .2rem 0;
+    text-decoration: underline;
+    &:active,
+    &:visited {
+        color: initial;
+    }
+}
+.cc-btn {
+    @extend .btn;
+}
+.cc-banner {
+    .cc-btn:last-child {
+        min-width: 140px;
+    }
+}
+.cc-highlight {
+    .cc-btn:first-child {
+        background-color: transparent;
+        border-color: transparent;
+        &:hover,
+        &:focus {
+            background-color: transparent;
+            text-decoration: underline;
+        }
+    }
+}
+.cc-close {
+    display: block;
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    font-size: 1.6rem;
+    opacity: .9;
+    line-height: .75;
+    &:hover,
+    &:focus {
+        opacity: 1;
+    }
+}
+
+//
+// Container
+// --------------------------------------------------
+.cc-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 0 auto;
+    gap: 1rem;
+    @include make-container();
+    @each $breakpoint, $container-max-width in $container-max-widths {
+        @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+            max-width: $container-max-width;
+        }
+    }
+}
+.cc-window.cc-floating {
+    .cc-container {
+        flex-direction: column;
+    }
+}
+.cc-window.cc-banner {
+    .cc-container {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+//
+// Styling
+// --------------------------------------------------
+.cc-revoke {
+    &.cc-top {
+        top: 0;
+        left: 3rem;
+        border-bottom-left-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+    }
+    &.cc-bottom {
+        bottom: 0;
+        left: 3rem;
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+    }
+    &.cc-left {
+        left: 3rem;
+        right: unset;
+    }
+    &.cc-right {
+        right: 3rem;
+        left: unset;
+    }
+}
+.cc-top {
+    top: var(--cookieconsent-space);
+}
+.cc-left {
+    left: var(--cookieconsent-space);
+}
+.cc-right {
+    right: var(--cookieconsent-space);
+}
+.cc-bottom {
+    bottom: var(--cookieconsent-space);
+}
+.cc-message {
+    line-height: 1.25rem;
+}
+.cc-floating {
+    .cc-message {
+        display: block;
+    }
+}
+.cc-window {
+    &.cc-floating {
+        .cc-compliance {
+            flex: 1 0 auto;
+        }
+    }
+    &.cc-banner {
+        align-items: center;
+    }
+}
+.cc-banner {
+    &.cc-top {
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+    &.cc-bottom {
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .cc-message {
+        padding-right: 1rem;
+        flex: 1;
+    }
+}
+.cc-compliance {
+    display: flex;
+    align-items: center;
+    align-content: space-between;
+    > .cc-btn {
+        flex: 1;
+    }
+}
+.cc-btn + .cc-btn {
+    margin-left: .5rem;
+}
+@media print {
+    .cc-window,
+    .cc-revoke {
+        display: none;
+    }
+}
+@media screen and (max-width: 900px) {
+    .cc-btn {
+        white-space: normal;
+    }
+}
+@media screen and (max-width: 480px) and (orientation: portrait), screen and (max-width: 736px) and (orientation: landscape) {
+    .cc-window {
+        &.cc-top {
+            top: 0;
+        }
+        &.cc-bottom {
+            bottom: 0;
+        }
+        &.cc-banner,
+        &.cc-right,
+        &.cc-left {
+            left: 0;
+            right: 0;
+        }
+        &.cc-banner {
+            flex-direction: column;
+            align-items: unset;
+            .cc-compliance {
+                flex: 1;
+            }
+        }
+        &.cc-floating {
+            padding: var(--cookieconsent-padding);
+            max-width: none;
+            .cc-container {
+                padding: 0;
+            }
+        }
+        .cc-message {
+            padding-right: 0;
+            margin-bottom: 1rem;
+        }
+    }
+    .cc-window.cc-banner {
+        .cc-container {
+            align-items: unset;
+            flex-direction: column;
+        }
+    }
+}
+
+//
+// Colors
+// --------------------------------------------------
+.cc-window,
+.cc-revoke {
+    color: var(--cookieconsent-color);
+    background-color: var(--cookieconsent-bg);
+}
+.cc-link,
+.cc-link:active,
+.cc-link:visited {
+    color: var(--cookieconsent-link-color);
+}
+.cc-link:hover,
+.cc-link:focus {
+    color: color-mix(in srgb, var(--cookieconsent-link-color), var(--cookieconsent-color) 25%);
+}
+.cc-btn {
+    @include button-variant($cookieconsent-button-bg, $cookieconsent-button-bg);
+}
+.cc-highlight .cc-btn:first-child {
+    @include button-variant($cookieconsent-button-highlight-bg, $cookieconsent-button-highlight-bg);
+}

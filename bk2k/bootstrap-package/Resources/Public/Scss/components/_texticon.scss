@@ -1,0 +1,80 @@
+//
+// Texticon
+// --------------------------------------------------
+.texticon {
+    --texticon-gap: calc(#{$grid-gutter-width} / 2);
+    display: flex;
+    gap: var(--texticon-gap);
+}
+.texticon-icon {
+    font-size: 2em;
+    .texticon-inner-icon,
+    .texticon-inner-icon svg,
+    .texticon-inner-icon img {
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+        height: 1em;
+        width: 1em;
+    }
+    .texticon-inner-icon {
+        display: flex;
+        align-items: center;
+    }
+}
+.texticon-content {
+    *:first-child {
+        margin-top: 0;
+    }
+    *:last-child {
+        margin-bottom: 0;
+    }
+}
+.texticon-size-awesome {
+    font-size: 3em;
+}
+@include media-breakpoint-up(sm) {
+    .texticon-size-large {
+        font-size: 3em;
+    }
+    .texticon-size-awesome {
+        font-size: 4em;
+    }
+}
+@include media-breakpoint-up(sm) {
+    .texticon-size-medium {
+        font-size: 3em;
+    }
+    .texticon-size-large {
+        font-size: 4em;
+    }
+    .texticon-size-awesome {
+        font-size: 5em;
+    }
+}
+.texticon-top {
+    flex-direction: column;
+}
+.texticon-type-square,
+.texticon-type-circle {
+    .texticon-inner-icon {
+        line-height: 2.3em;
+        height: 2.3em;
+        width: 2.3em;
+    }
+}
+.texticon-type-circle {
+    .texticon-inner-icon {
+        border-radius: 50%;
+    }
+}
+.texticon-left,
+.texticon-right {
+    .texticon-icon {
+        position: relative;
+        min-height: 1px;
+    }
+}
+.texticon-right .texticon-icon {
+    order: 2;
+}

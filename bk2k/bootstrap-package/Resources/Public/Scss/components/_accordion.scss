@@ -1,0 +1,66 @@
+//
+// Variables
+// --------------------------------------------------
+$accordion-content-gap:     $spacer !default;
+
+//
+// Accordion Content
+//
+.accordion-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $accordion-content-gap;
+}
+.accordion-content-item {
+    order: 1;
+    width: 100%;
+    > *:first-child {
+        margin-top: 0;
+    }
+    > *:last-child {
+        margin-bottom: 0;
+    }
+}
+.accordion-content-text {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+//
+// Position
+//
+.accordion-content-bottom {
+    .accordion-content-text {
+        order: 0;
+    }
+}
+.accordion-content-right {
+    .accordion-content-text {
+        order: 0;
+    }
+}
+@include media-breakpoint-up('md') {
+    .accordion-content-right,
+    .accordion-content-left {
+        .accordion-content-item {
+            width: calc(50% - (#{$accordion-content-gap} / 2));
+        }
+    }
+}
+
+//
+// Accessible focus styles
+//
+.accordion-button {
+    --#{$prefix}accordion-btn-focus-ring-contrast-color: #ffffff;
+    --#{$prefix}accordion-btn-focus-ring-color: #000000;
+}
+.accordion-button:focus-visible {
+    z-index: 3;
+    border-color: var(--#{$prefix}accordion-btn-focus-border-color);
+    outline: 0;
+    box-shadow: var(--#{$prefix}accordion-btn-focus-box-shadow);
+    --bs-accordion-btn-focus-box-shadow:
+        0 0 0 2px var(--#{$prefix}accordion-btn-focus-ring-contrast-color),
+        0 0 0 4px var(--#{$prefix}accordion-btn-focus-ring-color);
+}

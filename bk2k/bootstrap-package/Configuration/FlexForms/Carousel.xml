@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <sheetTitle>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:settings</sheetTitle>
+                <type>array</type>
+                <el>
+                    <autoplay>
+                        <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.autoplay</label>
+                        <config>
+                            <type>check</type>
+                            <default>0</default>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.autoplay.description</label>
+                                </numIndex>
+                            </items>
+                        </config>
+                    </autoplay>
+                    <interval>
+                        <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.interval
+                        </label>
+                        <config>
+                            <type>number</type>
+                            <size>8</size>
+                            <default>5000</default>
+                            <required>true</required>
+                        </config>
+                    </interval>
+                    <transition>
+                        <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.transition
+                        </label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <default>fade</default>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.transition.fade</label>
+                                    <value>fade</value>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.transition.slide</label>
+                                    <value>slide</value>
+                                </numIndex>
+                            </items>
+                        </config>
+                    </transition>
+                    <wrap>
+                        <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.wrap</label>
+                        <config>
+                            <type>check</type>
+                            <default>1</default>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.wrap.description</label>
+                                </numIndex>
+                            </items>
+                        </config>
+                    </wrap>
+                    <show_nav_title>
+                        <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.show_nav_title</label>
+                        <config>
+                            <type>check</type>
+                            <default>0</default>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:carousel.show_nav_title.description</label>
+                                </numIndex>
+                            </items>
+                        </config>
+                    </show_nav_title>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3DataStructure>

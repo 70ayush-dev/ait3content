@@ -1,0 +1,144 @@
+//
+// Variables
+// --------------------------------------------------
+$icongroup-margin: calc(#{$grid-gutter-width} / 2) !default;
+$icongroup-icon-size: 40px !default;
+
+//
+// Component
+// --------------------------------------------------
+.icongroup {
+    --icongroup-gap: #{$grid-gutter-width};
+    --icongroup-space: calc(var(--icongroup-gap) / 2);
+    --icongroup-icon-size: #{$icongroup-icon-size};
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--icongroup-gap);
+}
+
+//
+// Alignment
+// --------------------------------------------------
+.icongroup-align-left {
+    justify-content: flex-start;
+}
+.icongroup-align-center {
+    justify-content: center;
+}
+.icongroup-align-right {
+    justify-content: flex-end;
+}
+
+//
+// Icon Position
+// --------------------------------------------------
+.icongroup-iconposition-left-top {
+    .icongroup-item {
+        align-items: flex-start;
+    }
+}
+.icongroup-iconposition-left-center {
+    .icongroup-item {
+        align-items: center;
+    }
+}
+.icongroup-iconposition-right-top {
+    .icongroup-item {
+        align-items: flex-start;
+    }
+    .icongroup-item-icon {
+        order: 1;
+    }
+}
+.icongroup-iconposition-right-center {
+    .icongroup-item {
+        align-items: center;
+    }
+    .icongroup-item-icon {
+        order: 1;
+    }
+}
+.icongroup-iconposition-above,
+.icongroup-iconposition-below {
+    .icongroup-item {
+        flex-direction: column;
+    }
+    .icongroup-item-text {
+        text-align: center;
+    }
+    .icongroup-item-icon {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+.icongroup-iconposition-below {
+    .icongroup-item-icon {
+        order: 1;
+    }
+}
+
+//
+// Items
+// --------------------------------------------------
+.icongroup-item {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--icongroup-space);
+    width: 100%;
+}
+.icongroup-item-icon {
+    flex-shrink: 0;
+    width: var(--icongroup-icon-size);
+    svg {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+.icongroup-item-text {
+    flex-grow: 1;
+    > *:last-child {
+        margin-bottom: 0;
+    }
+}
+.icongroup-item-text-header {
+    font-size: 1.25em;
+    margin-bottom: .15em;
+}
+.icongroup-item-text-subheader {
+    font-size: 1em;
+}
+
+//
+// Columns
+// --------------------------------------------------
+.icongroup-columns-auto {
+    .icongroup-item {
+        width: auto;
+    }
+}
+.icongroup-columns-2 {
+    .icongroup-item {
+        @include media-breakpoint-up('sm') {
+            width: calc((100% - var(--icongroup-gap)) / 2);
+        }
+    }
+}
+.icongroup-columns-3 {
+    .icongroup-item {
+        @include media-breakpoint-up('md') {
+            width: calc((100% - var(--icongroup-gap) * 2) / 3);
+        }
+    }
+}
+.icongroup-columns-4 {
+    .icongroup-item {
+        @include media-breakpoint-up('sm') {
+            width: calc((100% - var(--icongroup-gap)) / 2);
+        }
+        @include media-breakpoint-up('xl') {
+            width: calc((100% - var(--icongroup-gap) * 3) / 4);
+        }
+    }
+}

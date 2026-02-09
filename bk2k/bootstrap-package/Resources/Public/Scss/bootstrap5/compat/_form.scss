@@ -1,0 +1,37 @@
+//
+// Form Group
+// --------------------------------------------------
+.form-group {
+    margin-bottom: $spacer;
+    input[type="file"] {
+        @extend .form-control;
+    }
+}
+fieldset.form-group {
+    > *:last-child {
+        margin-bottom: 0;
+    }
+}
+
+//
+// Actions
+// --------------------------------------------------
+.form-actions {
+    margin-top: $spacer;
+}
+
+// FE Login
+// Added for compliance with color contrast of border-radius
+// Should be improved when fe_login fluid templates implemented globally
+// --------------------------------------------------
+.frame-type-felogin_login {
+    input[type="text"],
+    input[type="password"] {
+        @extend .form-control;
+    }
+    input[type="submit"] {
+        margin-top: 1rem;
+        @extend .btn;
+        @extend .btn-primary;
+    }
+}

@@ -1,0 +1,31 @@
+//
+// Module Imports
+//
+@import "../../Contrib/photoswipe/photoswipe";
+@import "../../Contrib/photoswipe/photoswipe-dynamic-caption-plugin";
+
+//
+// Lightbox
+//
+a.lightbox {
+    cursor: zoom-in;
+}
+.image > a {
+    display: block;
+    &:focus-visible,
+    &:focus {
+        outline-offset: 1px;
+        outline: 2px solid;
+    }
+}
+
+//
+// Caption
+//
+.pswp__dynamic-caption__title,
+.pswp__dynamic-caption__subtitle {
+    word-wrap: break-word;
+}
+.pswp__dynamic-caption__title {
+    font-weight: bold;
+}

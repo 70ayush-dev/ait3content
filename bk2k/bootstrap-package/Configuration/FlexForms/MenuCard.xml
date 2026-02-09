@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <sheetTitle>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:settings</sheetTitle>
+                <type>array</type>
+                <el>
+                    <align>
+                        <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:menu.card.align</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <default>left</default>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:menu.card.align.left</label>
+                                    <value>left</value>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:menu.card.align.center</label>
+                                    <value>center</value>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:menu.card.align.right</label>
+                                    <value>right</value>
+                                </numIndex>
+                            </items>
+                        </config>
+                    </align>
+                    <columns>
+                        <label>LLL:EXT:bootstrap_package/Resources/Private/Language/Backend.xlf:menu.card.columns</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <default>2</default>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <label>1</label>
+                                    <value>1</value>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <label>2</label>
+                                    <value>2</value>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <label>3</label>
+                                    <value>3</value>
+                                </numIndex>
+                                <numIndex index="3" type="array">
+                                    <label>4</label>
+                                    <value>4</value>
+                                </numIndex>
+                            </items>
+                        </config>
+                    </columns>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3DataStructure>
