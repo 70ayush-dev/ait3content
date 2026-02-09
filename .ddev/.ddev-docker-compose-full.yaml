@@ -15,7 +15,7 @@ services:
     container_name: ddev-ait3content-db
     environment:
       BITNAMI_VOLUME_DIR: ""
-      COLUMNS: "160"
+      COLUMNS: "177"
       DDEV_DATABASE: mariadb:10.11
       DDEV_DATABASE_FAMILY: mysql
       DDEV_GID: "1000"
@@ -70,6 +70,7 @@ services:
       - mode: ingress
         host_ip: 127.0.0.1
         target: 3306
+        published: "32800"
         protocol: tcp
     restart: "no"
     stop_grace_period: 1m0s
@@ -112,7 +113,7 @@ services:
       - /pre-start.sh
     container_name: ddev-ait3content-web
     environment:
-      COLUMNS: "160"
+      COLUMNS: "177"
       COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
       COREPACK_HOME: /mnt/ddev-global-cache/corepack
       DDEV_APPROOT: /var/www/html
@@ -189,10 +190,12 @@ services:
       - mode: ingress
         host_ip: 127.0.0.1
         target: 80
+        published: "32796"
         protocol: tcp
       - mode: ingress
         host_ip: 127.0.0.1
         target: 443
+        published: "32797"
         protocol: tcp
       - mode: ingress
         host_ip: 127.0.0.1

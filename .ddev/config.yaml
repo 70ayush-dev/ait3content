@@ -11,9 +11,7 @@ database:
     version: "10.11"
 use_dns_when_possible: true
 composer_version: "2"
-web_environment:
-    - GEMINI_API_KEY=AIzaSyAjByAOV4VJm3j0ntBbKNa7A_z8KigJ4b8
-    - GEMINI_MODEL=gemini-3-pro-preview
+web_environment: []
 corepack_enable: false
 
 # Key features of DDEV's config.yaml:
