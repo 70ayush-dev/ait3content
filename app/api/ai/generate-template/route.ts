@@ -1,7 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { spawn } from "node:child_process";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 
 import { NextResponse } from "next/server";
 
@@ -20,6 +17,24 @@ type AiUsage = {
   inputTokens?: number | null;
   outputTokens?: number | null;
   totalTokens?: number | null;
+};
+
+type GeminiGenerateResponse = {
+  candidates?: Array<{
+    content?: {
+      parts?: Array<{ text?: string }>;
+    };
+    finishReason?: string;
+  }>;
+  usageMetadata?: {
+    promptTokenCount?: number;
+    candidatesTokenCount?: number;
+    totalTokenCount?: number;
+  };
+  modelVersion?: string;
+  error?: {
+    message?: string;
+  };
 };
 
 const buildPrompt = (spec: BuilderSpec): string =>
@@ -75,84 +90,64 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: "Missing spec." }, { status: 400 });
     }
 
-    const outFile = path.join("/tmp", `codex-ai-${randomUUID()}.txt`);
-    const prompt = buildPrompt(spec);
-
-    const jsonEvents: unknown[] = [];
-    await new Promise<void>((resolve, reject) => {
-      const child = spawn(
-        "codex",
-        [
-          "exec",
-          "--json",
-          "--skip-git-repo-check",
-          "-C",
-          process.cwd(),
-          "--output-last-message",
-          outFile,
-          prompt
-        ],
-        { stdio: ["ignore", "pipe", "pipe"] }
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { ok: false, error: "Missing GEMINI_API_KEY in environment." },
+        { status: 503 }
       );
+    }
 
-      let stderr = "";
-      let stdout = "";
-      child.stdout.on("data", (chunk) => {
-        stdout += String(chunk);
-      });
-      child.stderr.on("data", (chunk) => {
-        stderr += String(chunk);
-      });
-
-      child.on("error", reject);
-      child.on("close", (code) => {
-        const lines = stdout
-          .split("\n")
-          .map((line) => line.trim())
-          .filter(Boolean);
-        for (const line of lines) {
-          try {
-            jsonEvents.push(JSON.parse(line));
-          } catch {
-            // Ignore non-JSON lines
+    const model = process.env.GEMINI_MODEL || "gemini-2.5-pro";
+    const prompt = buildPrompt(spec);
+    const requestId = randomUUID();
+    const geminiResponse = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-goog-api-key": apiKey
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.2
           }
-        }
-        if (code === 0) {
-          resolve();
-          return;
-        }
-        reject(new Error(stderr || `Codex exited with code ${code}`));
-      });
-    });
+        })
+      }
+    );
 
-    const raw = await fs.readFile(outFile, "utf8");
-    await fs.unlink(outFile).catch(() => undefined);
+    const geminiJson = (await geminiResponse.json()) as GeminiGenerateResponse;
+    if (!geminiResponse.ok) {
+      const apiError = geminiJson?.error?.message || `Gemini request failed (${geminiResponse.status})`;
+      return NextResponse.json({ ok: false, error: `${apiError} [${requestId}]` }, { status: 502 });
+    }
+
+    const raw =
+      geminiJson.candidates?.[0]?.content?.parts
+        ?.map((part) => part.text || "")
+        .join("\n")
+        .trim() || "";
+
+    if (!raw) {
+      return NextResponse.json({ ok: false, error: `Gemini returned empty response. [${requestId}]` }, { status: 502 });
+    }
+
     const parsed = tryParseJson(raw);
     if (!parsed) {
-      return NextResponse.json({ ok: false, error: "Codex output was not valid JSON." }, { status: 422 });
+      return NextResponse.json({ ok: false, error: `Gemini output was not valid JSON. [${requestId}]` }, { status: 422 });
     }
 
     const usage: AiUsage = {};
-    for (const event of jsonEvents) {
-      if (!event || typeof event !== "object") {
-        continue;
-      }
-      const obj = event as Record<string, unknown>;
-      const payload = (obj.payload && typeof obj.payload === "object" ? obj.payload : obj) as Record<string, unknown>;
-      const model = payload.model;
-      if (typeof model === "string" && !usage.model) {
-        usage.model = model;
-      }
-      const usageObj = payload.usage && typeof payload.usage === "object" ? (payload.usage as Record<string, unknown>) : null;
-      if (usageObj) {
-        const input = typeof usageObj.input_tokens === "number" ? usageObj.input_tokens : null;
-        const output = typeof usageObj.output_tokens === "number" ? usageObj.output_tokens : null;
-        const total = typeof usageObj.total_tokens === "number" ? usageObj.total_tokens : input !== null && output !== null ? input + output : null;
-        if (input !== null) usage.inputTokens = input;
-        if (output !== null) usage.outputTokens = output;
-        if (total !== null) usage.totalTokens = total;
-      }
-    }
+    usage.model = geminiJson.modelVersion || model;
+    usage.inputTokens = geminiJson.usageMetadata?.promptTokenCount ?? null;
+    usage.outputTokens = geminiJson.usageMetadata?.candidatesTokenCount ?? null;
+    usage.totalTokens = geminiJson.usageMetadata?.totalTokenCount ?? null;
 
     return NextResponse.json({ ok: true, data: parsed, usage });
   } catch (error) {

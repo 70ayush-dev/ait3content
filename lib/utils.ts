@@ -938,7 +938,11 @@ export const createZipFromSpec = async (spec: BuilderSpec): Promise<Blob> => {
   const { default: JSZip } = await import("jszip");
   const zip = new JSZip();
   const files = buildGeneratedFiles(spec);
-  Object.entries(files).forEach(([path, content]) => zip.file(path, content));
+  const base = `${toTypo3Identifier(spec.meta.extensionKey)}/`;
+  Object.entries(files).forEach(([path, content]) => {
+    const zipPath = path.startsWith(base) ? path.slice(base.length) : path;
+    zip.file(zipPath, content);
+  });
   return zip.generateAsync({ type: "blob" });
 };
 
@@ -954,6 +958,10 @@ export const createZipFromSpecs = async (specs: BuilderSpec[]): Promise<Blob> =>
   const ext = toTypo3Identifier(first.meta.extensionKey);
   const vendor = toTypo3Identifier(first.meta.vendorName || "vendor");
   const base = `${ext}`;
+  const writeZipFile = (path: string, content: string) => {
+    const zipPath = path.startsWith(`${base}/`) ? path.slice(base.length + 1) : path;
+    zip.file(zipPath, content);
+  };
 
   const mismatch = specs.find(
     (spec) =>
@@ -1071,24 +1079,24 @@ This ZIP contains a single TYPO3 extension with ${bundleSpecs.length} custom con
 ${bundleSpecs.map((spec) => `- ${toTypo3Identifier(spec.meta.cTypeKey)} (${spec.meta.elementName})`).join("\n")}
 `;
 
-  zip.file(`${base}/README_IMPORT.md`, bundleReadme);
-  zip.file(`${base}/composer.json`, generateComposerJson(first));
-  zip.file(`${base}/ext_emconf.php`, generateExtEmconfPhp(first));
-  zip.file(`${base}/manifest.json`, manifest);
-  zip.file(`${base}/spec.json`, specJson);
-  zip.file(`${base}/ext_tables.php`, bundleExtTablesPhp);
-  zip.file(`${base}/ext_localconf.php`, generateExtLocalconfPhp(first));
-  zip.file(`${base}/ext_tables.sql`, extTablesSql);
-  zip.file(
+  writeZipFile(`${base}/README_IMPORT.md`, bundleReadme);
+  writeZipFile(`${base}/composer.json`, generateComposerJson(first));
+  writeZipFile(`${base}/ext_emconf.php`, generateExtEmconfPhp(first));
+  writeZipFile(`${base}/manifest.json`, manifest);
+  writeZipFile(`${base}/spec.json`, specJson);
+  writeZipFile(`${base}/ext_tables.php`, bundleExtTablesPhp);
+  writeZipFile(`${base}/ext_localconf.php`, generateExtLocalconfPhp(first));
+  writeZipFile(`${base}/ext_tables.sql`, extTablesSql);
+  writeZipFile(
     `${base}/Configuration/Icons.php`,
     `<?php\nreturn [\n${iconEntries}\n];\n`
   );
-  zip.file(`${base}/Configuration/page.tsconfig`, `${pageTsConfigImports}\n`);
-  zip.file(`${base}/Configuration/TCA/Overrides/sys_template.php`, sysTemplateOverride);
-  zip.file(`${base}/Configuration/TypoScript/constants.typoscript`, generateTypoScriptConstants(first));
-  zip.file(`${base}/Configuration/TypoScript/setup.typoscript`, `${typoScriptSetupImports}\n`);
-  zip.file(`${base}/Resources/Private/Partials/.gitkeep`, "");
-  zip.file(`${base}/Resources/Private/Layouts/.gitkeep`, "");
+  writeZipFile(`${base}/Configuration/page.tsconfig`, `${pageTsConfigImports}\n`);
+  writeZipFile(`${base}/Configuration/TCA/Overrides/sys_template.php`, sysTemplateOverride);
+  writeZipFile(`${base}/Configuration/TypoScript/constants.typoscript`, generateTypoScriptConstants(first));
+  writeZipFile(`${base}/Configuration/TypoScript/setup.typoscript`, `${typoScriptSetupImports}\n`);
+  writeZipFile(`${base}/Resources/Private/Partials/.gitkeep`, "");
+  writeZipFile(`${base}/Resources/Private/Layouts/.gitkeep`, "");
 
   bundleSpecs.forEach((spec) => {
     const cType = toTypo3Identifier(spec.meta.cTypeKey);
@@ -1096,17 +1104,17 @@ ${bundleSpecs.map((spec) => `- ${toTypo3Identifier(spec.meta.cTypeKey)} (${spec.
     const iconName = toTypo3Identifier(spec.meta.iconName || "default");
     const generatedTemplate = resolveTemplateHtml(spec);
 
-    zip.file(`${base}/Configuration/TCA/Overrides/tt_content_${cType}.php`, generateTcaOverridePhp(spec));
-    zip.file(`${base}/Configuration/TsConfig/Page/ContentElement/Element/${templateName}.tsconfig`, generatePageTsConfig(spec));
-    zip.file(`${base}/Configuration/TypoScript/ContentElement/Element/${templateName}.typoscript`, generateTypoScriptSetup(spec));
-    zip.file(`${base}/Resources/Private/Templates/ContentElements/${templateName}.html`, generatedTemplate);
-    zip.file(`${base}/Resources/Private/Templates/Preview/${templateName}.html`, generateBackendPreviewTemplate(spec));
-    zip.file(`${base}/Resources/Private/Language/locallang_${cType}.xlf`, generateLocallangXlf(spec));
-    zip.file(`${base}/Resources/Public/Icons/${iconName}.svg`, generateInitialIconSvg(spec));
+    writeZipFile(`${base}/Configuration/TCA/Overrides/tt_content_${cType}.php`, generateTcaOverridePhp(spec));
+    writeZipFile(`${base}/Configuration/TsConfig/Page/ContentElement/Element/${templateName}.tsconfig`, generatePageTsConfig(spec));
+    writeZipFile(`${base}/Configuration/TypoScript/ContentElement/Element/${templateName}.typoscript`, generateTypoScriptSetup(spec));
+    writeZipFile(`${base}/Resources/Private/Templates/ContentElements/${templateName}.html`, generatedTemplate);
+    writeZipFile(`${base}/Resources/Private/Templates/Preview/${templateName}.html`, generateBackendPreviewTemplate(spec));
+    writeZipFile(`${base}/Resources/Private/Language/locallang_${cType}.xlf`, generateLocallangXlf(spec));
+    writeZipFile(`${base}/Resources/Public/Icons/${iconName}.svg`, generateInitialIconSvg(spec));
 
     repeaterFields(spec).forEach((field) => {
       const table = repeaterTableName(ext, cType, field.key);
-      zip.file(`${base}/Configuration/TCA/${table}.php`, generateRepeaterTableTcaPhp(spec, field));
+      writeZipFile(`${base}/Configuration/TCA/${table}.php`, generateRepeaterTableTcaPhp(spec, field));
     });
   });
 

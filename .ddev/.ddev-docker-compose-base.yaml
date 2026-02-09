@@ -125,6 +125,7 @@ services:
       - .:/mnt/ddev_config:ro
       - ./xhprof:/usr/local/bin/xhprof:rw
       
+      - ../.git:/var/www/html/.git:rw
       - ddev-global-cache:/mnt/ddev-global-cache
       - ddev-ssh-agent_socket_dir:/home/.ssh-agent
 
@@ -205,6 +206,8 @@ services:
     # that's why we subtract 5 seconds to make sure we didn't hit exactly.
     # Currently used in 2 places: n-install.sh, install_nvm.sh
     - START_SCRIPT_TIMEOUT=57
+    - "GEMINI_API_KEY=AIzaSyAjByAOV4VJm3j0ntBbKNa7A_z8KigJ4b8"
+    - "GEMINI_MODEL=gemini-3-pro-preview"
     
     labels:
       com.ddev.site-name: ${DDEV_SITENAME}
