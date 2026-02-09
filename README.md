@@ -29,6 +29,27 @@ This project provides a modern, drag-and-drop interface to design content elemen
 - Node.js (v18+ recommended)
 - npm or yarn
 
+### DDEV Support
+
+This project includes DDEV configuration for a quick local setup.
+
+1.  Start the project with DDEV:
+    ```bash
+    ddev start
+    ```
+
+2.  Install dependencies (if not already done):
+    ```bash
+    ddev exec npm install
+    ```
+
+3.  Run the development server:
+    ```bash
+    ddev exec npm run dev
+    ```
+
+4.  Access the site at `https://ait3content.ddev.site`.
+
 ### Installation
 
 1.  Clone the repository:
