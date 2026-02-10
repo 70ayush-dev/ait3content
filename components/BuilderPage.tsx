@@ -761,7 +761,7 @@ export default function BuilderPage() {
       const blob = await createZipFromSpecs([spec]);
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `${spec.meta.vendorName}_${spec.meta.extensionKey}_${spec.meta.cTypeKey}.zip`;
+      link.download = `${spec.meta.extensionKey}.zip`;
       link.click();
       URL.revokeObjectURL(link.href);
       setStep(6);

@@ -1134,7 +1134,7 @@ export const exportZip = async (spec: BuilderSpec): Promise<void> => {
   const blob = await createZipFromSpec(spec);
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = `${spec.meta.extensionKey}_${spec.meta.cTypeKey}.zip`;
+  link.download = `${spec.meta.extensionKey}.zip`;
   link.click();
   URL.revokeObjectURL(link.href);
 };
