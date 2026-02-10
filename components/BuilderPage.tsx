@@ -821,7 +821,7 @@ export default function BuilderPage() {
       const blob = await createZipFromSpecs(bundle);
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `${bundle[0].meta.vendorName}_${bundle[0].meta.extensionKey}_bundle.zip`;
+      link.download = `${bundle[0].meta.extensionKey}.zip`;
       link.click();
       URL.revokeObjectURL(link.href);
       setStatus({ type: "ok", text: `Bundle ZIP exported with ${bundle.length} elements.` });
@@ -945,7 +945,7 @@ export default function BuilderPage() {
                 disabled={aiGenerating}
                 className="w-full rounded-xl border border-cyan-300 bg-cyan-50 px-3 py-2 text-sm font-semibold text-cyan-800 hover:bg-cyan-100 disabled:opacity-60"
               >
-                {aiGenerating ? "Generating via AI..." : "Generate via AI (Codex CLI)"}
+                {aiGenerating ? "Generating via AI..." : "Generate via AI (gemini)"}
               </button>
               {aiGenerating && (
                 <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-2">
