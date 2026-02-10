@@ -945,7 +945,7 @@ export default function BuilderPage() {
                 disabled={aiGenerating}
                 className="w-full rounded-xl border border-cyan-300 bg-cyan-50 px-3 py-2 text-sm font-semibold text-cyan-800 hover:bg-cyan-100 disabled:opacity-60"
               >
-                {aiGenerating ? "Generating via AI..." : "Generate via AI (gemini)"}
+                {aiGenerating ? "Generating via AI..." : "Generate via AI (Gemini)"}
               </button>
               {aiGenerating && (
                 <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-2">
@@ -1207,9 +1207,9 @@ export default function BuilderPage() {
             </article>
 
             <article className="rounded-3xl border border-slate-300/70 bg-white/80 p-5 shadow-lg shadow-slate-900/5 backdrop-blur-sm">
-              <h2 className="mb-3 text-lg font-semibold text-slate-900">Step 5: AI Assist (Codex CLI)</h2>
+              <h2 className="mb-3 text-lg font-semibold text-slate-900">Step 5: AI Assist (Gemini)</h2>
               <p className="mb-3 text-sm text-slate-600">
-                Generate directly via Codex CLI from this UI, or copy the prompt for manual CLI usage.
+                Generate directly via Gemini from this UI, or copy the prompt for manual CLI usage.
               </p>
               <button
                 type="button"
